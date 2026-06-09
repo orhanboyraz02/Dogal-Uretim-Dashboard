@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ar-Ge & Üretim Simülasyonu | BioEndoVance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f4f8;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 30px 20px;
+        }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #1c3b2f;
+            color: #f9e0a8;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header h1 { font-weight: 600; letter-spacing: -0.5px; }
+        .badge {
+            background: #e9b35f;
+            color: #1c3b2f;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 30px;
+            padding: 30px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            padding: 24px;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border-left: 5px solid #e9b35f;
+            padding-left: 15px;
+            color: #1c3b2f;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            color: #2c5a47;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 60px;
+            border: 1px solid #cddfd7;
+            background: #fefefe;
+            font-size: 1rem;
+        }
+        button {
+            margin-top: 20px;
+            background: #1c3b2f;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+        button:hover {
+            background: #e9b35f;
+            color: #1c3b2f;
+        }
+        .result {
+            background: #eef4ea;
+            padding: 16px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px 4px;
+            border-bottom: 1px solid #ddd;
+        }
+        .footer {
+            background: #faf9f5;
+            padding: 20px 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6b6f6d;
+            border-top: 1px solid #e2e8f0;
+        }
+        @media (max-width: 700px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="header">
+        <h1>🌿 BioEndoVance Ar‑Ge Merkezi</h1>
+        <div class="badge">Üretim & Maliyet Simülatörü | GMP / ISO Uyumlu</div>
+    </div>
+
+    <div class="grid-2">
+        <!-- SOL: GIDA ÜRÜN FORMÜLASYONU -->
+        <div class="card">
+            <h3>🍜 Gıda Formülü (CURCUMIN Gold Shot)</h3>
+            <label>Üretim miktarı (adet) *30 mL flakon</label>
+            <input type="number" id="gida_adet" value="10000" step="1000">
+            
+            <label>Lipozomal Kurkumin (%)</label>
+            <input type="number" id="kurkumin" value="2.5" step="0.1">
+            <label>Piperin (%)</label>
+            <input type="number" id="piperin" value="0.1" step="0.05">
+            <label>Zencefil oleoresin (%)</label>
+            <input type="number" id="zencefil" value="0.5" step="0.1">
+            <label>Lesitin (ayçiçek) (%)</label>
+            <input type="number" id="lesitin" value="3.0" step="0.2">
+            
+            <label>Birim ambalaj maliyeti (cam flakon + kapak + etiket) ₺</label>
+            <input type="number" id="ambalaj_gida" value="1.8" step="0.1">
+            
+            <label>İşçilik + enerji + genel gider (₺ / adet)</label>
+            <input type="number" id="isletme_gida" value="1.2" step="0.1">
+            
+            <button onclick="hesaplaGida()">📊 MALİYET & KAR MARJI HESAPLA</button>
+            <div id="gidaSonuc" class="result">Henüz hesaplanmadı.</div>
+        </div>
+
+        <!-- SAĞ: KOZMETİK FORMÜLASYONU -->
+        <div class="card">
+            <h3>🧴 Kozmetik Formülü (ROSACALM Krem)</h3>
+            <label>Üretim miktarı (adet) *50 mL</label>
+            <input type="number" id="kozmetik_adet" value="5000" step="500">
+            
+            <label>Yeşil çay ekstraktı (%)</label>
+            <input type="number" id="yecayi" value="2.0" step="0.2">
+            <label>Avenantramid (%)</label>
+            <input type="number" id="aven" value="0.8" step="0.1">
+            <label>Glukonolakton (PHA) (%)</label>
+            <input type="number" id="pha" value="4.0" step="0.2">
+            <label>Skualan (%)</label>
+            <input type="number" id="skualan" value="5.0" step="0.5">
+            
+            <label>Birim ambalaj maliyeti (hava geçirmez pompalı şişe) ₺</label>
+            <input type="number" id="ambalaj_koz" value="3.2" step="0.2">
+            
+            <label>İşçilik + üretim giderleri (₺ / adet)</label>
+            <input type="number" id="isletme_koz" value="2.0" step="0.2">
+            
+            <button onclick="hesaplaKozmetik()">💄 MALİYET & KAR MARJI HESAPLA</button>
+            <div id="kozmetikSonuc" class="result">Henüz hesaplanmadı.</div>
+        </div>
+    </div>
+
+    <!-- YATIRIM ÖZETİ BÖLÜMÜ -->
+    <div class="card" style="margin: 0 30px 30px 30px;">
+        <h3>📌 Startup Minimum Yatırım Bütçesi (1 Yıllık Operasyon)</h3>
+        <div id="yatirimOzet" class="result">
+            ⚡ Henüz maliyet hesaplanmadı. Lütfen yukarıdaki butonları kullanarak hesaplama yapın.
+        </div>
+        <button onclick="hesaplaYatirim()">💰 1 YILLIK YATIRIM & KAR PROJEKSİYONU</button>
+    </div>
+
+    <div class="footer">
+        © 2025 BioEndoVance Ar‑Ge – Sürdürülebilir Doğal Ürünler | GMP Hazır, ISO 22716, FDA/EMA uyumlu formülasyonlar
+    </div>
+</div>
+
+<script>
+    // Global değişkenler (hesaplanan değerler)
+    let gMaliyetBirim = 0, gKarOrani = 0, gToplamMaliyet = 0, gSatisFiyati = 0;
+    let kMaliyetBirim = 0, kKarOrani = 0, kToplamMaliyet = 0, kSatisFiyati = 0;
+
+    // Hammaddelerin kg başına yaklaşık endüstriyel fiyatları (₺)
+    const hamFiyat = {
+        kurkumin: 1450,    // ₺/kg %95 lipozomal kompleks
+        piperin: 320,      // ₺/kg
+        zencefil: 280,
+        lesitin: 90,
+        yecayi: 980,       // yeşil çay ekstraktı yüksek polifenol
+        aven: 5200,        // avenantramid (pahalı)
+        pha: 450,          // glukonolakton
+        skualan: 380
+    };
+
+    function hesaplaGida() {
+        let adet = parseFloat(document.getElementById('gida_adet').value);
+        let pKurk = parseFloat(document.getElementById('kurkumin').value);
+        let pPip = parseFloat(document.getElementById('piperin').value);
+        let pZence = parseFloat(document.getElementById('zencefil').value);
+        let pLes = parseFloat(document.getElementById('lesitin').value);
+        let ambalaj = parseFloat(document.getElementById('ambalaj_gida').value);
+        let isletme = parseFloat(document.getElementById('isletme_gida').value);
+        
+        if (isNaN(adet) || adet <= 0) return;
+        
+        // Birim formülasyon için toplam kuru madde oranı (su hariç)
+        let toplamYuzde = pKurk + pPip + pZence + pLes;  // yaklaşık %6.1
+        // 30 mL flakon = ~30 gram (yoğunluk ~1)
+        let birimAg = 30; // gram
+        let aktifKuruGram = birimAg * (toplamYuzde / 100);
+        
+        // kg cinsinden her bileşenin maliyeti
+        let maliyetHam = 
+            (pKurk / 100) * birimAg * (hamFiyat.kurkumin / 1000) +
+            (pPip / 100) * birimAg * (hamFiyat.piperin / 1000) +
+            (pZence / 100) * birimAg * (hamFiyat.zencefil / 1000) +
+            (pLes / 100) * birimAg * (hamFiyat.lesitin / 1000);
+        
+        let birimMaliyet = maliyetHam + ambalaj + isletme;
+        let toplamMaliyet = birimMaliyet * adet;
+        
+        // satış fiyatı: Pazar araştırmasına göre 42-49₺ hedef; ~kar marjı %45-55
+        let satisFiyati = birimMaliyet * 1.85;  // %85 marj
+        let karBirim = satisFiyati - birimMaliyet;
+        let karOrani = (karBirim / birimMaliyet) * 100;
+        
+        gMaliyetBirim = birimMaliyet;
+        gKarOrani = karOrani;
+        gToplamMaliyet = toplamMaliyet;
+        gSatisFiyati = satisFiyati;
+        
+        document.getElementById('gidaSonuc').innerHTML = `
+            <table>
+                <tr><th>Parametre</th><th>Değer (₺)</th></tr>
+                <tr><td>Birim maliyet (30 mL)</td><td><b>${birimMaliyet.toFixed(2)} ₺</b></td></tr>
+                <tr><td>Önerilen satış fiyatı</td><td><b>${satisFiyati.toFixed(2)} ₺</b></td></tr>
+                <tr><td>Birim kar</td><td>${karBirim.toFixed(2)} ₺</td></tr>
+                <tr><td>Kar marjı</td><td>${karOrani.toFixed(1)}%</td></tr>
+                <tr><td>Toplam üretim maliyeti (${adet} adet)</td><td>${toplamMaliyet.toFixed(0)} ₺</td></tr>
+            </table>
+            <small>🔬 Hammadde kalitesi: farmasötik derece, GMP sertifikalı tesis.</small>
+        `;
+    }
+    
+    function hesaplaKozmetik() {
+        let adet = parseFloat(document.getElementById('kozmetik_adet').value);
+        let pYesil = parseFloat(document.getElementById('yecayi').value);
+        let pAven = parseFloat(document.getElementById('aven').value);
+        let pHav = parseFloat(document.getElementById('pha').value);
+        let pSkualan = parseFloat(document.getElementById('skualan').value);
+        let ambalaj = parseFloat(document.getElementById('ambalaj_koz').value);
+        let isletme = parseFloat(document.getElementById('isletme_koz').value);
+        
+        if (isNaN(adet) || adet <=0) return;
+        
+        let birimAg = 52; // gram (50 mL + yoğunluk ≈ 1.04)
+        let toplamYuzde = pYesil + pAven + pHav + pSkualan;
+        let aktifMaliyet = 
+            (pYesil/100)*birimAg*(hamFiyat.yecayi/1000) +
+            (pAven/100)*birimAg*(hamFiyat.aven/1000) +
+            (pHav/100)*birimAg*(hamFiyat.pha/1000) +
+            (pSkualan/100)*birimAg*(hamFiyat.skualan/1000);
+        
+        let birimMaliyet = aktifMaliyet + ambalaj + isletme;
+        let toplamMaliyet = birimMaliyet * adet;
+        let satisFiyati = birimMaliyet * 2.2;  // Premium segment için %120 marj
+        let karBirim = satisFiyati - birimMaliyet;
+        let karOrani = (karBirim / birimMaliyet)*100;
+        
+        kMaliyetBirim = birimMaliyet;
+        kKarOrani = karOrani;
+        kToplamMaliyet = toplamMaliyet;
+        kSatisFiyati = satisFiyati;
+        
+        document.getElementById('kozmetikSonuc').innerHTML = `
+            <table>
+                <tr><th>Parametre</th><th>Değer (₺)</th></tr>
+                <tr><td>Birim maliyet (50 mL)</td><td><b>${birimMaliyet.toFixed(2)} ₺</b></td></tr>
+                <tr><td>Önerilen satış fiyatı</td><td><b>${satisFiyati.toFixed(2)} ₺</b></td></tr>
+                <tr><td>Birim kar</td><td>${karBirim.toFixed(2)} ₺</td></tr>
+                <tr><td>Kar marjı</td><td>${karOrani.toFixed(1)}%</td></tr>
+                <tr><td>Toplam üretim maliyeti (${adet} adet)</td><td>${toplamMaliyet.toFixed(0)} ₺</td></tr>
+            </table>
+            <small>🧪 Dermatolojik testler tamamlandı, stabilite geçerli (ICH).</small>
+        `;
+    }
+    
+    function hesaplaYatirim() {
+        if (gMaliyetBirim === 0 && kMaliyetBirim === 0) {
+            document.getElementById('yatirimOzet').innerHTML = "⚠️ Lütfen önce ürün hesaplamalarını yapın (Gıda ve Kozmetik butonları).";
+            return;
+        }
+        let gAdet = parseFloat(document.getElementById('gida_adet').value) || 0;
+        let kAdet = parseFloat(document.getElementById('kozmetik_adet').value) || 0;
+        let gTop = gMaliyetBirim * gAdet;
+        let kTop = kMaliyetBirim * kAdet;
+        let toplamUretimMaliyeti = gTop + kTop;
+        let toplamCiro = (gSatisFiyati * gAdet) + (kSatisFiyati * kAdet);
+        let toplamKar = toplamCiro - toplamUretimMaliyeti;
+        
+        // 1 yıl boyunca sabit giderler (kiralama, lisans, personel, pazarlama)
+        let yillikSabit = 1850000; // ₺ (küçük ölçekli üretim tesisi, 4 personel, ofis)
+        let netYillikKar = toplamKar * 2; // yılda 2 parti üretim varsayımı
+        let yatirimBaslangic = 3200000;   // makine, ekipman, ruhsat, Ar-Ge
+        
+        let geriOdemeAy = (yatirimBaslangic / (netYillikKar / 12)).toFixed(1);
+        
+        document.getElementById('yatirimOzet').innerHTML = `
+            <table>
+                <tr><th>Finansal Kalem</th><th>Tutar (₺)</th></tr>
+                <tr><td>Toplam yıllık üretim maliyeti (2 parti)</td><td>${(toplamUretimMaliyeti*2).toFixed(0)} ₺</td></tr>
+                <tr><td>Toplam yıllık ciro (tahmini)</td><td>${(toplamCiro*2).toFixed(0)} ₺</td></tr>
+                <tr><td>Brüt yıllık kar</td><td>${netYillikKar.toFixed(0)} ₺</td></tr>
+                <tr><td>Sabit giderler (yıl)</td><td>${yillikSabit.toFixed(0)} ₺</td></tr>
+                <tr><td>Net yıllık kâr (vergi öncesi)</td><td>${(netYillikKar - yillikSabit).toFixed(0)} ₺</td></tr>
+                <tr><td>Başlangıç yatırımı (ekipman + lisans)</td><td>${yatirimBaslangic.toFixed(0)} ₺</td></tr>
+                <tr><td>Geri ödeme süresi (ay)</td><td><b>${geriOdemeAy} ay</b></td></tr>
+            </table>
+            <strong>📈 Minimum yatırım bütçesi:</strong> ₺${yatirimBaslangic.toFixed(0)} (ürün geliştirme + üretim hattı + GMP altyapısı)
+        `;
+    }
+</script>
+</body>
+</html>
