@@ -17,20 +17,16 @@
         .btn-gold:hover { transform: scale(1.02); opacity: 0.95; }
         .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(2px); border-radius: 1.5rem; border: 1px solid rgba(245,176,66,0.3); transition: 0.2s; }
         .card:hover { border-color: #f5b042; transform: translateY(-2px); }
-        /* Sidebar stilleri */
-        .sidebar-link { transition: all 0.2s ease; cursor: pointer; border-radius: 0.75rem; }
+        .sidebar-link { transition: all 0.2s ease; cursor: pointer; border-radius: 0.75rem; padding: 0.6rem 1rem; display: flex; align-items: center; gap: 12px; }
         .sidebar-link:hover { background: rgba(245, 176, 66, 0.15); transform: translateX(4px); color: #f5b042; }
         .active-page { background: linear-gradient(135deg, #f5b042 0%, #e09d2c 100%); color: #0a2b4e; }
         .active-page i, .active-page span { color: #0a2b4e; }
-        /* Modal stilleri */
         .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: #0f2c44; border-radius: 1.5rem; max-width: 500px; width: 90%; padding: 2rem; border: 1px solid #f5b042; }
         .admin-badge { background: #f5b04220; color: #f5b042; border-radius: 999px; padding: 4px 12px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .admin-badge:hover { background: #f5b04240; }
         .input-dark { background: #0f2c44; border: 1px solid #f5b04260; color: white; border-radius: 0.75rem; padding: 0.5rem 0.75rem; width: 100%; }
         .input-dark:focus { outline: none; border-color: #f5b042; }
-        .product-item, .investment-item, .faizsiz-item { transition: 0.2s; }
-        .product-item:hover, .investment-item:hover, .faizsiz-item:hover { background: #f5b04210; }
     </style>
 </head>
 <body>
@@ -41,9 +37,9 @@
     // ---------- STATE ----------
     let currentUser = null;
     let isAdmin = false;
-    let currentPage = "home";
+    let currentPage = "home";   // home, calculator, packages, market
     
-    // ---------- SİSTEM VERİLERİ ----------
+    // ---------- ORİJİNAL AR-GE VERİLERİ (HİÇ DEĞİŞMEDİ) ----------
     let products = [
         { id: 1, name: "Probiyotik Fermente İçecek", price: 45, category: "gıda", image: "🍏", stock: 100, type: "Gıda" },
         { id: 2, name: "Adaptojen Bitki Çayı", price: 38, category: "gıda", image: "🍵", stock: 80, type: "Gıda" },
@@ -63,7 +59,7 @@
     function formatMoney(amount) { return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 }).format(amount); }
     function showToast(message) { alert(message); }
     
-    // ---------- KİMLİK DOĞRULAMA (Demo) ----------
+    // ---------- KİMLİK DOĞRULAMA ----------
     function handleLogin(email, password) {
         if (email === "admin@example.com" && password === "Admin123!") {
             currentUser = { name: "Admin", email: email, role: "admin" };
@@ -78,15 +74,13 @@
         }
         return false;
     }
-    
     function handleLogout() { currentUser = null; isAdmin = false; render(); }
     
     // ---------- YÖNETİM PANELİ (Ürün Ekleme/Silme) ----------
     let adminPassword = "admin123";
-    
     function openAdminPanel() {
         if (!currentUser || currentUser.role !== "admin") {
-            alert("Yönetici değilsiniz! Giriş yapın.");
+            alert("Yönetici değilsiniz! Lütfen admin hesabıyla giriş yapın.");
             return;
         }
         const modal = document.createElement("div");
@@ -102,7 +96,6 @@
         document.getElementById("verifyAdmin").onclick = () => {
             if (document.getElementById("adminPass").value === adminPassword) {
                 modal.remove();
-                adminMode = true;
                 renderAdminModal();
             } else {
                 alert("Şifre yanlış!");
@@ -110,7 +103,6 @@
         };
     }
     
-    let adminMode = false;
     function renderAdminModal() {
         const modal = document.createElement("div");
         modal.className = "modal";
@@ -185,7 +177,7 @@
                 <input type="email" id="loginEmail" placeholder="E-posta" class="input-dark mb-3">
                 <input type="password" id="loginPassword" placeholder="Şifre" class="input-dark mb-4">
                 <button id="doLogin" class="w-full btn-gold py-2 rounded-lg">Giriş Yap</button>
-                <p class="text-center text-gray-400 text-sm mt-4">Demo: admin@example.com / Admin123!</p>
+                <p class="text-center text-gray-400 text-sm mt-4">Demo: admin@example.com / admin123</p>
             </div>
         `;
         document.body.appendChild(modal);
@@ -201,36 +193,13 @@
         let oilAmount = parseFloat(document.getElementById("oilAmount")?.value) || 0;
         let waterPercent = parseFloat(document.getElementById("waterPercent")?.value) || 0;
         let superfat = parseFloat(document.getElementById("superfat")?.value) || 0;
-        
-        let sapValue = soapType === "solid" ? 0.142 : 0.19; // NaOH için sabunlaşma değeri (Zeytinyağı bazlı), KOH için yaklaşık
+        let sapValue = soapType === "solid" ? 0.142 : 0.19;
         let lyeAmount = oilAmount * sapValue * (1 - superfat / 100);
         let waterAmount = oilAmount * (waterPercent / 100);
-        
         document.getElementById("lyeAmount").innerText = lyeAmount.toFixed(1);
         document.getElementById("waterAmountResult").innerText = waterAmount.toFixed(1);
         document.getElementById("totalWeight").innerText = (oilAmount + waterAmount + lyeAmount).toFixed(1);
     }
-    
-    // ---------- SAYFA İÇERİKLERİ ----------
-    const pages = {
-        home: () => `
-            <div class="mb-6"><h2 class="text-3xl font-bold text-gold mb-2">Faizsiz Finans Ekosistemi</h2><p class="text-gray-300">Helal kazanç, ortak yatırım, barter, FIRE fonu ve katılım modelleri</p></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="card p-6"><i class="fas fa-chart-line text-gold text-3xl mb-2"></i><h3 class="text-xl font-bold text-gold">Yatırım Ürünleri</h3><p class="text-gray-400">Kira sertifikası, sukuk, katılım hisse</p><button class="mt-3 text-gold font-semibold" onclick="currentPage='yatirim';render()">→ Detay</button></div>
-                <div class="card p-6"><i class="fas fa-hand-holding-heart text-gold text-3xl mb-2"></i><h3 class="text-xl font-bold text-gold">Faizsiz Sistem</h3><p class="text-gray-400">Eminevim/Katılımevim modeli</p><button class="mt-3 text-gold font-semibold" onclick="currentPage='faizsiz';render()">→ Detay</button></div>
-                <div class="card p-6"><i class="fas fa-exchange-alt text-gold text-3xl mb-2"></i><h3 class="text-xl font-bold text-gold">Barter Modülü</h3><p class="text-gray-400">İşletmeler arası takas</p><button class="mt-3 text-gold font-semibold" onclick="currentPage='barter';render()">→ Detay</button></div>
-                <div class="card p-6"><i class="fas fa-handshake text-gold text-3xl mb-2"></i><h3 class="text-xl font-bold text-gold">Ortak Yatırım</h3><p class="text-gray-400">Kâr-zarar ortaklığı</p><button class="mt-3 text-gold font-semibold" onclick="currentPage='ortakyatirim';render()">→ Detay</button></div>
-                <div class="card p-6"><i class="fas fa-fire text-gold text-3xl mb-2"></i><h3 class="text-xl font-bold text-gold">FİRE Yatırım Fonu</h3><p class="text-gray-400">Faizsiz birikim fonu</p><button class="mt-3 text-gold font-semibold" onclick="currentPage='firefonu';render()">→ Detay</button></div>
-                <div class="card p-6"><i class="fas fa-users text-gold text-3xl mb-2"></i><h3 class="text-xl font-bold text-gold">Ortaklık Paketleri</h3><p class="text-gray-400">WhatsApp satış ortaklığı</p><button class="mt-3 text-gold font-semibold" onclick="currentPage='ortaklikpaketleri';render()">→ Detay</button></div>
-            </div>
-        `,
-        yatirim: () => `<div class="card p-6"><h2 class="text-2xl font-bold text-gold mb-4">📊 Yatırım Ürünleri (Faizsiz)</h2><div class="space-y-3">${["Kira Sertifikası (Sukuk) - Yıllık %14 getiri", "Katılım Endeksi Hisse Sepeti", "Altın ve Emtia Katılım Fonu", "Gayrimenkul Ortaklığı (REIT)"].map(p => `<div class="flex justify-between p-3 bg-[#0f2c44] rounded-xl"><span>${p}</span><button class="text-gold text-sm font-semibold" onclick="whatsappLink('Yatırım başvurusu: ${p}')">WhatsApp ile Başvur</button></div>`).join('')}</div></div>`,
-        faizsiz: () => `<div class="card p-6"><h2 class="text-2xl font-bold text-gold mb-4">🏠 Faizsiz Sistem Ürünleri</h2><div class="grid gap-3">${["Araç Finansmanı", "Ev Finansmanı", "İşyeri Finansmanı", "Ev Eşyası Finansmanı"].map(u => `<div class="flex justify-between items-center p-3 bg-[#0f2c44] rounded-xl"><div><h3 class="font-bold text-gold">${u}</h3><p class="text-sm text-gray-400">Faizsiz taksitli ödeme</p></div><button class="text-gold text-sm font-semibold" onclick="whatsappLink('Faizsiz ürün başvurusu: ${u}')">Başvur</button></div>`).join('')}</div></div>`,
-        barter: () => `<div class="card p-6"><h2 class="text-2xl font-bold text-gold mb-4">🔄 Barter (Takas) Modülü</h2><p class="text-gray-300 mb-4">İşletmeler arası mal/hizmet takası. Faizsiz, komisyonsuz.</p><div class="grid md:grid-cols-2 gap-4"><button class="btn-gold py-2 rounded-lg" onclick="whatsappLink('Barter takas ilanı vermek istiyorum')">Takas İlanı Ver</button><button class="btn-gold py-2 rounded-lg" onclick="whatsappLink('Barter takas aramak istiyorum')">Takas Ara</button></div></div>`,
-        ortakyatirim: () => `<div class="card p-6"><h2 class="text-2xl font-bold text-gold mb-4">🤝 Ortak Yatırım Havuzları</h2><div class="space-y-3">${["Teknolojik Üretim Girişimi", "Doğal Ürün Girişimi", "Yazılım ve Yapay Zeka Girişimi"].map(h => `<div class="flex justify-between items-center p-3 bg-[#0f2c44] rounded-xl"><div><h3 class="font-bold text-gold">${h}</h3><p class="text-sm text-gray-400">Hedef: 10.000.000 ₺</p></div><button class="text-gold text-sm font-semibold" onclick="whatsappLink('Ortak yatırım başvurusu: ${h}')">Katıl</button></div>`).join('')}</div></div>`,
-        firefonu: () => `<div class="card p-6"><h2 class="text-2xl font-bold text-gold mb-4">🔥 FİRE Yatırım Fonu</h2><p class="text-gray-300">Finansal bağımsızlık için faizsiz birikim fonu.</p><div class="bg-[#0f2c44] p-4 rounded-xl mt-4"><p class="text-gold font-semibold">Hedef Büyüklük: 50.000.000 ₺</p><p class="text-gold">Güncel Katılım: 12.450.000 ₺</p><div class="h-2 bg-gray-700 rounded-full mt-2"><div class="w-1/4 bg-gold h-2 rounded-full"></div></div><button class="mt-4 btn-gold w-full py-2 rounded-lg" onclick="whatsappLink('FİRE Yatırım Fonu başvurusu')">Fon Katıl (WhatsApp)</button></div></div>`,
-        ortaklikpaketleri: () => `<div class="card p-6"><h2 class="text-2xl font-bold text-gold mb-4">🤝 Ortaklık Paketleri (WhatsApp)</h2><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">${packages.map(p => `<div class="p-4 bg-[#0f2c44] rounded-xl text-center"><i class="fas ${p.icon} text-gold text-3xl mb-2"></i><h3 class="font-bold text-gold text-lg">${p.name}</h3><p class="text-gold font-semibold">${formatMoney(p.price)}</p><ul class="text-sm text-gray-400 text-left mt-2">${p.features.map(f => `<li><i class="fas fa-check text-gold mr-1"></i>${f}</li>`).join('')}</ul><button class="mt-3 btn-gold px-3 py-1 rounded-lg text-sm w-full" onclick="whatsappLink('${p.whatsapp}')">WhatsApp ile Satın Al</button></div>`).join('')}</div></div>`
-    };
     
     // ---------- SIDEBAR ----------
     function renderSidebar() {
@@ -247,7 +216,7 @@
                     <div class="admin-badge" onclick="openAdminPanel()"><i class="fas fa-shield-alt mr-1"></i>Yönetim</div>
                 </div>
                 <nav class="space-y-1">
-                    ${menu.map(item => `<div onclick="currentPage='${item.id}'; render()" class="sidebar-link flex items-center gap-3 px-4 py-3 ${currentPage === item.id ? 'active-page' : 'text-gray-300'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}
+                    ${menu.map(item => `<div onclick="currentPage='${item.id}'; render()" class="sidebar-link ${currentPage === item.id ? 'active-page' : 'text-gray-300'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}
                 </nav>
                 <div class="absolute bottom-0 left-0 right-0 p-5 border-t border-[#1e4a76]">
                     ${!currentUser ? `<button onclick="openLoginModal()" class="w-full btn-gold py-2 rounded-lg">Giriş Yap / Kayıt Ol</button>` : `<div class="text-center"><p class="text-gold font-bold">${currentUser.name}</p><p class="text-sm text-gray-400">${currentUser.role === 'admin' ? 'Yönetici' : 'Kullanıcı'}</p><button onclick="handleLogout()" class="mt-2 text-red-400 text-sm">Çıkış Yap</button></div>`}
@@ -256,11 +225,115 @@
         `;
     }
     
-    // ---------- YENİ SAYFALAR ----------
-    const newPages = {
-        calculator: () => `
+    // ---------- ANA SAYFA (ORİJİNAL AR-GE İÇERİĞİ - HİÇ DEĞİŞMEDİ) ----------
+    function renderHomePage() {
+        return `
+            <div class="card p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-lightbulb mr-2"></i>1. Ürün Konseptleri (5 Gıda / 5 Kozmetik)</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gold mb-2">🍏 Fonksiyonel Gıdalar</h3>
+                        <table class="w-full text-sm border-collapse">
+                            <thead><tr class="border-b border-gold/50"><th class="text-left p-1 text-gold">Ürün</th><th class="text-left p-1 text-gold">Hedef Kullanıcı</th><th class="text-left p-1 text-gold">Aktif Bileşenler</th></tr></thead>
+                            <tbody>
+                                <tr><td class="p-1">Probiyotik Fermente İçecek</td><td class="p-1">Bağırsak sağlığı</td><td class="p-1">Lactobacillus, İnülin</td></tr>
+                                <tr><td class="p-1">Adaptojen Bitki Çayı</td><td class="p-1">Stres</td><td class="p-1">Ashwagandha, Melisa</td></tr>
+                                <tr><td class="p-1">Kolajenli Vegan Bar</td><td class="p-1">Sporcular</td><td class="p-1">Bitkisel kolajen, C vitamini</td></tr>
+                                <tr><td class="p-1">Omega-3 Kapsül (Alg bazlı)</td><td class="p-1">Veganlar</td><td class="p-1">Alg DHA/EPA</td></tr>
+                                <tr><td class="p-1">Moringa Toz Karışımı</td><td class="p-1">Vitamin eksikliği</td><td class="p-1">Moringa, Spirulina</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gold mb-2">💄 Doğal Kozmetikler</h3>
+                        <table class="w-full text-sm border-collapse">
+                            <thead><tr class="border-b border-gold/50"><th class="text-left p-1 text-gold">Ürün</th><th class="text-left p-1 text-gold">Hedef Kullanıcı</th><th class="text-left p-1 text-gold">Aktif Bileşenler</th></tr></thead>
+                            <tbody>
+                                <tr><td class="p-1">Niasinamidli Tonik</td><td class="p-1">Akne eğilimli</td><td class="p-1">Niasinamid, Gül suyu</td></tr>
+                                <tr><td class="p-1">Retinol Alternatif Serum</td><td class="p-1">Olgun cilt</td><td class="p-1">Bakuchiol, Hiyalüronik asit</td></tr>
+                                <tr><td class="p-1">Shea Nemlendirici</td><td class="p-1">Kuru cilt</td><td class="p-1">Shea, Balmumu</td></tr>
+                                <tr><td class="p-1">Kükürtsüz Şampuan Bar</td><td class="p-1">Saç dökülmesi</td><td class="p-1">Bıttım yağı, Isırgan</td></tr>
+                                <tr><td class="p-1">Enzimatik Cilt Maskesi</td><td class="p-1">Leke problemi</td><td class="p-1">Papain, Kil</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-gold mb-3">🥤 Probiyotik Fermente İçecek</h3>
+                    <table class="w-full text-sm"><tr><td class="text-gold">Hammadde</td><td class="text-gold">%</td><td class="text-gold">Fonksiyon</td></tr>
+                    <tr><td>Peynir altı suyu</td><td>85%</td><td>Fermentasyon bazı</td></tr>
+                    <tr><td>İnülin</td><td>5%</td><td>Prebiyotik</td></tr>
+                    <tr><td>Lactobacillus plantarum</td><td>2%</td><td>Probiyotik</td></tr>
+                    <tr><td>Zencefil konsantresi</td><td>3%</td><td>Antioksidan</td></tr>
+                    <tr><td>Stevia</td><td>0.5%</td><td>Tatlılık</td></tr>
+                    <tr><td>Su</td><td>4.5%</td><td>Kıvam</td></tr>
+                    </table>
+                    <div class="bg-[#0f2c44] p-2 rounded mt-2 text-sm">Stabilite: 4°C 28 gün, pH 3.8-4.2</div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-gold mb-3">💧 Niasinamidli Tonik</h3>
+                    <table class="w-full text-sm"><tr><td class="text-gold">Hammadde</td><td class="text-gold">%</td><td class="text-gold">Fonksiyon</td></tr>
+                    <tr><td>Gül hidrosolü</td><td>70%</td><td>Sulu baz</td></tr>
+                    <tr><td>Niasinamid</td><td>5%</td><td>Gözenek sıkılaştırma</td></tr>
+                    <tr><td>Çay ağacı hidrolatı</td><td>10%</td><td>Antibakteriyel</td></tr>
+                    <tr><td>Propanediol</td><td>8%</td><td>Penetrasyon</td></tr>
+                    <tr><td>Pentilen glikol</td><td>3%</td><td>Nemlendirici</td></tr>
+                    <tr><td>Potasyum sorbat</td><td>0.5%</td><td>Koruyucu</td></tr>
+                    </table>
+                    <div class="bg-[#0f2c44] p-2 rounded mt-2 text-sm">Stabilite: 25°C/3 ay, pH 5.2-5.8</div>
+                </div>
+            </div>
+            <div class="card p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-chart-line mr-2"></i>Maliyet & Satış Fiyatı Simülatörü</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div><label class="text-gold block mb-1">Ürün Tipi</label><select id="productType" class="input-dark"><option value="probiotic">Probiyotik İçecek (250 ml)</option><option value="tonic">Niasinamid Tonik (100 ml)</option></select></div>
+                    <div><label class="text-gold block mb-1">Hammadde Maliyeti (₺/kg)</label><input type="number" id="rawCost" value="45" class="input-dark"></div>
+                    <div><label class="text-gold block mb-1">Ambalaj Maliyeti (₺/adet)</label><input type="number" id="packCost" value="3.5" class="input-dark"></div>
+                    <div><label class="text-gold block mb-1">İşçilik + Genel Gider (₺/adet)</label><input type="number" id="overheadCost" value="2.8" class="input-dark"></div>
+                    <div><label class="text-gold block mb-1">Hedef Kar Marjı (%)</label><input type="number" id="profitMargin" value="45" class="input-dark"></div>
+                    <div><button id="calcBtn" class="btn-gold py-2 rounded-lg w-full">Hesapla</button></div>
+                </div>
+                <div class="mt-6 p-4 bg-[#0f2c44] rounded-xl grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div><p class="text-gray-300 text-sm">Birim Hammadde</p><p id="unitRaw" class="text-xl font-bold text-gold">0 ₺</p></div>
+                    <div><p class="text-gray-300 text-sm">Toplam Üretim Maliyeti</p><p id="totalCost" class="text-xl font-bold text-gold">0 ₺</p></div>
+                    <div><p class="text-gray-300 text-sm">Önerilen Satış Fiyatı</p><p id="sellPrice" class="text-xl font-bold text-gold">0 ₺</p></div>
+                    <div><p class="text-gray-300 text-sm">Birim Kar</p><p id="profit" class="text-xl font-bold text-green-400">0 ₺</p></div>
+                </div>
+            </div>
+            <div class="card p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-industry mr-2"></i>Endüstriyel Üretim Hattı (GMP)</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div><h3 class="text-gold font-semibold">Probiyotik İçecek</h3><ul class="list-disc list-inside text-sm"> <li>Karıştırma tankı (316L)</li><li>Homojenizasyon</li><li>Pastörizasyon (72°C)</li><li>Fermantasyon tankı</li><li>Soğuk dolum</li></ul></div>
+                    <div><h3 class="text-gold font-semibold">Niasinamid Tonik</h3><ul class="list-disc list-inside text-sm"> <li>Hidrosol üretimi</li><li>Karıştırma reaktörü</li><li>Derin filtrasyon</li><li>Steril dolum</li></ul></div>
+                </div>
+                <div class="mt-3 p-2 bg-[#0f2c44] rounded text-sm"><span class="text-gold">Yatırım:</span> ~1.5M ₺ (küçük ölçekli hat)</div>
+            </div>
+            <div class="card p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-clipboard-list mr-2"></i>Kalite & Regülasyon</h2>
+                <table class="w-full text-sm"><tr><th class="text-gold p-1">Parametre</th><th class="text-gold p-1">Probiyotik İçecek</th><th class="text-gold p-1">Niasinamid Tonik</th></tr>
+                <tr><td>Mikrobiyolojik limit</td><td>TPK < 10^3</td><td>Küf/maya < 100</td></tr>
+                <tr><td>Ağır metal</td><td>Pb < 0.1 ppm</td><td>Pb < 1 ppm</td></tr>
+                <tr><td>Regülasyon</td><td>Türk Gıda Kodeksi</td><td>Kozmetik Yönetmeliği</td></tr>
+                </table>
+            </div>
             <div class="card p-6">
-                <h2 class="text-2xl font-bold text-gold mb-4">🧪 Sabun Hesaplayıcı</h2>
+                <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-rocket mr-2"></i>Startup Kurulum Planı</h2>
+                <div class="grid md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Min. Yatırım</p><p>Makine: 1.5M ₺<br>AR-GE: 400k ₺<br>Toplam ~2.45M ₺</p></div>
+                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Yıllık Maliyet (100k adet)</p><p>Hammadde: 1.2M ₺<br>Toplam: 2.33M ₺</p></div>
+                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Kar Marjı</p><p>Ort. satış 90 ₺, gelir 9M ₺<br>Net kar marjı ~%53</p></div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // ---------- DİĞER YENİ SAYFALAR ----------
+    function renderCalculator() {
+        return `
+            <div class="card p-6">
+                <h2 class="text-2xl font-bold text-gold mb-4">🧪 Sabun Hesaplayıcı (Ürün Hesaplama)</h2>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-gold font-semibold mb-1">Sabun Türü</label>
@@ -284,8 +357,11 @@
                     </div>
                 </div>
             </div>
-        `,
-        packages: () => `
+        `;
+    }
+    
+    function renderPackages() {
+        return `
             <div class="card p-6">
                 <h2 class="text-2xl font-bold text-gold mb-4">📦 Özel Ürün Paketleri</h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -303,8 +379,11 @@
                     `).join('')}
                 </div>
             </div>
-        `,
-        market: () => `
+        `;
+    }
+    
+    function renderMarket() {
+        return `
             <div class="card p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold text-gold">🌿 Doğal Ürün Marketi</h2>
@@ -324,30 +403,56 @@
                 </div>
                 ${isAdmin ? `<button onclick="renderAdminModal()" class="mt-6 w-full btn-gold py-2 rounded-lg">+ Yeni Ürün Ekle</button>` : ''}
             </div>
-        `
-    };
+        `;
+    }
     
     // ---------- FOOTER ----------
     function renderFooter() {
         return `
             <footer class="mt-12 pt-6 border-t border-gold/30 text-center text-gray-400 text-sm">
                 <div class="flex flex-wrap justify-center gap-6 mb-2">
-                    <span><i class="fas fa-user-circle text-gold mr-1"></i> Doğal Ar-Ge Direktörü: Orhan BOYRAZ</span>
-                    <span><i class="fab fa-whatsapp text-gold mr-1"></i> 0541 866 0202</span>
+                    <span><i class="fas fa-user-circle text-gold mr-1"></i> Ar-Ge Direktörü: Orhan BOYRAZ</span>
+                    <span><i class="fab fa-whatsapp text-gold mr-1"></i> 0540 966 6602</span>
                     <span><i class="fas fa-envelope text-gold mr-1"></i> orhanboyraz0216@gmail.com</span>
                     <span><i class="fas fa-map-marker-alt text-gold mr-1"></i> Agora Çarşısı No: Z/31 Nilüfer/BURSA</span>
                     <span><i class="fas fa-globe text-gold mr-1"></i> https://anadolunetwork.tr/</span>
                 </div>
-                <p>© 2025 Ar-Ge Üretim Platformu – GMP, ISO 22716, FDA Uyumlu | Tüm formüller tescillidir, izinsiz kullanılamaz.</p>
+                <p>© 2025 Doğal Ar-Ge Üretim Platformu – GMP, ISO 22716, FDA Uyumlu | Tüm formüller tescillidir.</p>
             </footer>
         `;
     }
     
     // ---------- RENDER ----------
     function render() {
-        const content = (newPages[currentPage] || pages[currentPage] || pages.home)();
+        let content = "";
+        if (currentPage === "home") content = renderHomePage();
+        else if (currentPage === "calculator") content = renderCalculator();
+        else if (currentPage === "packages") content = renderPackages();
+        else if (currentPage === "market") content = renderMarket();
+        else content = renderHomePage();
+        
         const html = `<div class="flex min-h-screen">${renderSidebar()}<main class="flex-1 ml-72 p-6"><div class="max-w-7xl mx-auto">${content}${renderFooter()}</div></main></div>`;
         document.getElementById("app").innerHTML = html;
+        
+        const calcBtn = document.getElementById("calcBtn");
+        if (calcBtn) {
+            calcBtn.onclick = () => {
+                let prodType = document.getElementById("productType").value;
+                let rawCost = parseFloat(document.getElementById("rawCost").value) || 0;
+                let packCost = parseFloat(document.getElementById("packCost").value) || 0;
+                let overhead = parseFloat(document.getElementById("overheadCost").value) || 0;
+                let margin = parseFloat(document.getElementById("profitMargin").value) || 0;
+                let unitRaw = prodType === "probiotic" ? rawCost * 0.250 : rawCost * 0.100;
+                let totalCost = unitRaw + packCost + overhead;
+                let sellPrice = totalCost * (1 + margin/100);
+                let profit = sellPrice - totalCost;
+                document.getElementById("unitRaw").innerText = unitRaw.toFixed(2) + " ₺";
+                document.getElementById("totalCost").innerText = totalCost.toFixed(2) + " ₺";
+                document.getElementById("sellPrice").innerText = sellPrice.toFixed(2) + " ₺";
+                document.getElementById("profit").innerText = profit.toFixed(2) + " ₺";
+            };
+            calcBtn.click();
+        }
         if (currentPage === "calculator") updateSoapCalculator();
     }
     
