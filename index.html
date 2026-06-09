@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Doğal Ar-Ge Üretim Platformu |Doğal Gıda & Kozmetik Formülasyon</title>
+    <title>Doğal Üretim Platformu |Doğal Gıda & Kozmetik Formülasyon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,16 +17,21 @@
         .btn-gold:hover { transform: scale(1.02); opacity: 0.95; }
         .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(2px); border-radius: 1.5rem; border: 1px solid rgba(245,176,66,0.3); transition: 0.2s; }
         .card:hover { border-color: #f5b042; transform: translateY(-2px); }
+        /* Sidebar stilleri */
         .sidebar-link { transition: all 0.2s ease; cursor: pointer; border-radius: 0.75rem; padding: 0.6rem 1rem; display: flex; align-items: center; gap: 12px; }
         .sidebar-link:hover { background: rgba(245, 176, 66, 0.15); transform: translateX(4px); color: #f5b042; }
         .active-page { background: linear-gradient(135deg, #f5b042 0%, #e09d2c 100%); color: #0a2b4e; }
         .active-page i, .active-page span { color: #0a2b4e; }
+        /* Modal stilleri */
         .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: #0f2c44; border-radius: 1.5rem; max-width: 500px; width: 90%; padding: 2rem; border: 1px solid #f5b042; }
         .admin-badge { background: #f5b04220; color: #f5b042; border-radius: 999px; padding: 4px 12px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .admin-badge:hover { background: #f5b04240; }
         .input-dark { background: #0f2c44; border: 1px solid #f5b04260; color: white; border-radius: 0.75rem; padding: 0.5rem 0.75rem; width: 100%; }
         .input-dark:focus { outline: none; border-color: #f5b042; }
+        /* Beyaz yazılar için */
+        .text-white-custom { color: white !important; }
+        .text-gray-light { color: #e2e8f0; }
     </style>
 </head>
 <body>
@@ -39,7 +44,7 @@
     let isAdmin = false;
     let currentPage = "home";   // home, calculator, packages, market
     
-    // ---------- ORİJİNAL AR-GE VERİLERİ (HİÇ DEĞİŞMEDİ) ----------
+    // ---------- ORİJİNAL AR-GE VERİLERİ ----------
     let products = [
         { id: 1, name: "Probiyotik Fermente İçecek", price: 45, category: "gıda", image: "🍏", stock: 100, type: "Gıda" },
         { id: 2, name: "Adaptojen Bitki Çayı", price: 38, category: "gıda", image: "🍵", stock: 80, type: "Gıda" },
@@ -76,7 +81,7 @@
     }
     function handleLogout() { currentUser = null; isAdmin = false; render(); }
     
-    // ---------- YÖNETİM PANELİ (Ürün Ekleme/Silme) ----------
+    // ---------- YÖNETİM PANELİ ----------
     let adminPassword = "admin123";
     function openAdminPanel() {
         if (!currentUser || currentUser.role !== "admin") {
@@ -148,7 +153,7 @@
         const container = document.getElementById("productList");
         if (!container) return;
         container.innerHTML = products.map(p => `
-            <div class="flex justify-between items-center p-2 border-b border-gray-600">
+            <div class="flex justify-between items-center p-2 border-b border-gray-600 text-white">
                 <span><span class="text-gold">${p.image}</span> ${p.name} - ${formatMoney(p.price)}</span>
                 <button onclick="deleteProduct(${p.id})" class="text-red-400 text-sm">🗑️ Sil</button>
             </div>
@@ -177,7 +182,7 @@
                 <input type="email" id="loginEmail" placeholder="E-posta" class="input-dark mb-3">
                 <input type="password" id="loginPassword" placeholder="Şifre" class="input-dark mb-4">
                 <button id="doLogin" class="w-full btn-gold py-2 rounded-lg">Giriş Yap</button>
-                <p class="text-center text-gray-400 text-sm mt-4">Demo: admin@example.com / admin123</p>
+                <p class="text-center text-gray-400 text-sm mt-4">Demo: admin@example.com / Admin123!</p>
             </div>
         `;
         document.body.appendChild(modal);
@@ -212,30 +217,35 @@
         return `
             <aside class="fixed left-0 top-0 h-full w-72 bg-[#0a2b4e] shadow-2xl border-r border-[#1e4a76] p-5 overflow-y-auto z-10">
                 <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center gap-3"><i class="fas fa-flask text-gold text-2xl"></i><h1 class="text-2xl font-bold text-gold">Ar-Ge Platformu</h1></div>
+                    <div class="flex items-center gap-3"><i class="fas fa-flask text-gold text-2xl"></i><h1 class="text-2xl font-bold text-white">Ar-Ge Platformu</h1></div>
                     <div class="admin-badge" onclick="openAdminPanel()"><i class="fas fa-shield-alt mr-1"></i>Yönetim</div>
                 </div>
                 <nav class="space-y-1">
-                    ${menu.map(item => `<div onclick="currentPage='${item.id}'; render()" class="sidebar-link ${currentPage === item.id ? 'active-page' : 'text-gray-300'}"><i class="fas ${item.icon} w-5"></i><span>${item.label}</span></div>`).join('')}
+                    ${menu.map(item => `<div onclick="currentPage='${item.id}'; render()" class="sidebar-link ${currentPage === item.id ? 'active-page' : 'text-gray-300'}"><i class="fas ${item.icon} w-5"></i><span class="text-white">${item.label}</span></div>`).join('')}
                 </nav>
                 <div class="absolute bottom-0 left-0 right-0 p-5 border-t border-[#1e4a76]">
-                    ${!currentUser ? `<button onclick="openLoginModal()" class="w-full btn-gold py-2 rounded-lg">Giriş Yap / Kayıt Ol</button>` : `<div class="text-center"><p class="text-gold font-bold">${currentUser.name}</p><p class="text-sm text-gray-400">${currentUser.role === 'admin' ? 'Yönetici' : 'Kullanıcı'}</p><button onclick="handleLogout()" class="mt-2 text-red-400 text-sm">Çıkış Yap</button></div>`}
+                    ${!currentUser ? `<button onclick="openLoginModal()" class="w-full btn-gold py-2 rounded-lg">Giriş Yap / Kayıt Ol</button>` : `<div class="text-center"><p class="text-gold font-bold">${currentUser.name}</p><p class="text-sm text-gray-300">${currentUser.role === 'admin' ? 'Yönetici' : 'Kullanıcı'}</p><button onclick="handleLogout()" class="mt-2 text-red-400 text-sm">Çıkış Yap</button></div>`}
                 </div>
             </aside>
         `;
     }
     
-    // ---------- ANA SAYFA (ORİJİNAL AR-GE İÇERİĞİ - HİÇ DEĞİŞMEDİ) ----------
+    // ---------- ANA SAYFA (GENİŞLETİLMİŞ FORMÜLLER & YAPAY ZEKA) ----------
     function renderHomePage() {
         return `
+            <div class="card p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-robot mr-2"></i>Yapay Zeka ile Formül Hazırlama</h2>
+                <p class="text-gray-light mb-3">Yapay zeka (makine öğrenmesi ve optimizasyon algoritmaları) sayesinde bitkisel ekstraktların sinerjik etkileri analiz edilerek optimum formülasyonlar oluşturulur. AI, binlerce ham madde kombinasyonunu tarar, stabilite ve etkinlik tahmini yapar, üretim parametrelerini optimize eder.</p>
+                <p class="text-gray-light"><span class="text-gold font-semibold">Örnek AI Kullanımı:</span> Doğal koruyucu sistemlerin tahmini (mikrobiyolojik modelleme), cilt tipine göre aktif bileşen önerileri (sinir ağları), en düşük maliyetli formül optimizasyonu (genetik algoritmalar).</p>
+            </div>
             <div class="card p-6 mb-8">
                 <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-lightbulb mr-2"></i>1. Ürün Konseptleri (5 Gıda / 5 Kozmetik)</h2>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-xl font-semibold text-gold mb-2">🍏 Fonksiyonel Gıdalar</h3>
                         <table class="w-full text-sm border-collapse">
-                            <thead><tr class="border-b border-gold/50"><th class="text-left p-1 text-gold">Ürün</th><th class="text-left p-1 text-gold">Hedef Kullanıcı</th><th class="text-left p-1 text-gold">Aktif Bileşenler</th></tr></thead>
-                            <tbody>
+                            <thead><tr class="border-b border-gold/50"><th class="text-left p-1 text-gold">Ürün</th><th class="text-left p-1 text-gold">Hedef Kullanıcı</th><th class="text-left p-1 text-gold">Aktif Bileşenler</th> </tr></thead>
+                            <tbody class="text-gray-light">
                                 <tr><td class="p-1">Probiyotik Fermente İçecek</td><td class="p-1">Bağırsak sağlığı</td><td class="p-1">Lactobacillus, İnülin</td></tr>
                                 <tr><td class="p-1">Adaptojen Bitki Çayı</td><td class="p-1">Stres</td><td class="p-1">Ashwagandha, Melisa</td></tr>
                                 <tr><td class="p-1">Kolajenli Vegan Bar</td><td class="p-1">Sporcular</td><td class="p-1">Bitkisel kolajen, C vitamini</td></tr>
@@ -247,8 +257,8 @@
                     <div>
                         <h3 class="text-xl font-semibold text-gold mb-2">💄 Doğal Kozmetikler</h3>
                         <table class="w-full text-sm border-collapse">
-                            <thead><tr class="border-b border-gold/50"><th class="text-left p-1 text-gold">Ürün</th><th class="text-left p-1 text-gold">Hedef Kullanıcı</th><th class="text-left p-1 text-gold">Aktif Bileşenler</th></tr></thead>
-                            <tbody>
+                            <thead><tr class="border-b border-gold/50"><th class="text-left p-1 text-gold">Ürün</th><th class="text-left p-1 text-gold">Hedef Kullanıcı</th><th class="text-left p-1 text-gold">Aktif Bileşenler</th> </tr></thead>
+                            <tbody class="text-gray-light">
                                 <tr><td class="p-1">Niasinamidli Tonik</td><td class="p-1">Akne eğilimli</td><td class="p-1">Niasinamid, Gül suyu</td></tr>
                                 <tr><td class="p-1">Retinol Alternatif Serum</td><td class="p-1">Olgun cilt</td><td class="p-1">Bakuchiol, Hiyalüronik asit</td></tr>
                                 <tr><td class="p-1">Shea Nemlendirici</td><td class="p-1">Kuru cilt</td><td class="p-1">Shea, Balmumu</td></tr>
@@ -261,28 +271,28 @@
             </div>
             <div class="grid md:grid-cols-2 gap-8 mb-8">
                 <div class="card p-6">
-                    <h3 class="text-xl font-bold text-gold mb-3">🥤 Probiyotik Fermente İçecek</h3>
-                    <table class="w-full text-sm"><tr><td class="text-gold">Hammadde</td><td class="text-gold">%</td><td class="text-gold">Fonksiyon</td></tr>
-                    <tr><td>Peynir altı suyu</td><td>85%</td><td>Fermentasyon bazı</td></tr>
-                    <tr><td>İnülin</td><td>5%</td><td>Prebiyotik</td></tr>
-                    <tr><td>Lactobacillus plantarum</td><td>2%</td><td>Probiyotik</td></tr>
-                    <tr><td>Zencefil konsantresi</td><td>3%</td><td>Antioksidan</td></tr>
-                    <tr><td>Stevia</td><td>0.5%</td><td>Tatlılık</td></tr>
-                    <tr><td>Su</td><td>4.5%</td><td>Kıvam</td></tr>
+                    <h3 class="text-xl font-bold text-gold mb-3">🥤 Probiyotik Fermente İçecek (Gıda)</h3>
+                    <table class="w-full text-sm"> <tr><td class="text-gold">Hammadde</td><td class="text-gold">%</td><td class="text-gold">Fonksiyon</td></tr>
+                    <tr class="text-gray-light"><td>Peynir altı suyu</td><td>85%</td><td>Fermentasyon bazı</td></tr>
+                    <tr class="text-gray-light"><td>İnülin</td><td>5%</td><td>Prebiyotik</td></tr>
+                    <tr class="text-gray-light"><td>Lactobacillus plantarum</td><td>2%</td><td>Probiyotik</td></tr>
+                    <tr class="text-gray-light"><td>Zencefil konsantresi</td><td>3%</td><td>Antioksidan</td></tr>
+                    <tr class="text-gray-light"><td>Stevia</td><td>0.5%</td><td>Tatlılık</td></tr>
+                    <tr class="text-gray-light"><td>Su</td><td>4.5%</td><td>Kıvam</td></tr>
                     </table>
-                    <div class="bg-[#0f2c44] p-2 rounded mt-2 text-sm">Stabilite: 4°C 28 gün, pH 3.8-4.2</div>
+                    <div class="bg-[#0f2c44] p-2 rounded mt-2 text-sm text-gray-light">Stabilite: 4°C 28 gün, pH 3.8-4.2</div>
                 </div>
                 <div class="card p-6">
-                    <h3 class="text-xl font-bold text-gold mb-3">💧 Niasinamidli Tonik</h3>
-                    <table class="w-full text-sm"><tr><td class="text-gold">Hammadde</td><td class="text-gold">%</td><td class="text-gold">Fonksiyon</td></tr>
-                    <tr><td>Gül hidrosolü</td><td>70%</td><td>Sulu baz</td></tr>
-                    <tr><td>Niasinamid</td><td>5%</td><td>Gözenek sıkılaştırma</td></tr>
-                    <tr><td>Çay ağacı hidrolatı</td><td>10%</td><td>Antibakteriyel</td></tr>
-                    <tr><td>Propanediol</td><td>8%</td><td>Penetrasyon</td></tr>
-                    <tr><td>Pentilen glikol</td><td>3%</td><td>Nemlendirici</td></tr>
-                    <tr><td>Potasyum sorbat</td><td>0.5%</td><td>Koruyucu</td></tr>
+                    <h3 class="text-xl font-bold text-gold mb-3">💧 Niasinamidli Tonik (Kozmetik)</h3>
+                    <table class="w-full text-sm"> <tr><td class="text-gold">Hammadde</td><td class="text-gold">%</td><td class="text-gold">Fonksiyon</td></tr>
+                    <tr class="text-gray-light"><td>Gül hidrosolü</td><td>70%</td><td>Sulu baz</td></tr>
+                    <tr class="text-gray-light"><td>Niasinamid</td><td>5%</td><td>Gözenek sıkılaştırma</td></tr>
+                    <tr class="text-gray-light"><td>Çay ağacı hidrolatı</td><td>10%</td><td>Antibakteriyel</td></tr>
+                    <tr class="text-gray-light"><td>Propanediol</td><td>8%</td><td>Penetrasyon</td></tr>
+                    <tr class="text-gray-light"><td>Pentilen glikol</td><td>3%</td><td>Nemlendirici</td></tr>
+                    <tr class="text-gray-light"><td>Potasyum sorbat</td><td>0.5%</td><td>Koruyucu</td></tr>
                     </table>
-                    <div class="bg-[#0f2c44] p-2 rounded mt-2 text-sm">Stabilite: 25°C/3 ay, pH 5.2-5.8</div>
+                    <div class="bg-[#0f2c44] p-2 rounded mt-2 text-sm text-gray-light">Stabilite: 25°C/3 ay, pH 5.2-5.8</div>
                 </div>
             </div>
             <div class="card p-6 mb-8">
@@ -305,25 +315,25 @@
             <div class="card p-6 mb-8">
                 <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-industry mr-2"></i>Endüstriyel Üretim Hattı (GMP)</h2>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div><h3 class="text-gold font-semibold">Probiyotik İçecek</h3><ul class="list-disc list-inside text-sm"> <li>Karıştırma tankı (316L)</li><li>Homojenizasyon</li><li>Pastörizasyon (72°C)</li><li>Fermantasyon tankı</li><li>Soğuk dolum</li></ul></div>
-                    <div><h3 class="text-gold font-semibold">Niasinamid Tonik</h3><ul class="list-disc list-inside text-sm"> <li>Hidrosol üretimi</li><li>Karıştırma reaktörü</li><li>Derin filtrasyon</li><li>Steril dolum</li></ul></div>
+                    <div><h3 class="text-gold font-semibold">Probiyotik İçecek</h3><ul class="list-disc list-inside text-sm text-gray-light"> <li>Karıştırma tankı (316L)</li><li>Homojenizasyon</li><li>Pastörizasyon (72°C)</li><li>Fermantasyon tankı</li><li>Soğuk dolum</li></ul></div>
+                    <div><h3 class="text-gold font-semibold">Niasinamid Tonik</h3><ul class="list-disc list-inside text-sm text-gray-light"> <li>Hidrosol üretimi</li><li>Karıştırma reaktörü</li><li>Derin filtrasyon</li><li>Steril dolum</li></ul></div>
                 </div>
-                <div class="mt-3 p-2 bg-[#0f2c44] rounded text-sm"><span class="text-gold">Yatırım:</span> ~1.5M ₺ (küçük ölçekli hat)</div>
+                <div class="mt-3 p-2 bg-[#0f2c44] rounded text-sm text-gray-light"><span class="text-gold">Yatırım:</span> ~1.5M ₺ (küçük ölçekli hat)</div>
             </div>
             <div class="card p-6 mb-8">
                 <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-clipboard-list mr-2"></i>Kalite & Regülasyon</h2>
-                <table class="w-full text-sm"><tr><th class="text-gold p-1">Parametre</th><th class="text-gold p-1">Probiyotik İçecek</th><th class="text-gold p-1">Niasinamid Tonik</th></tr>
-                <tr><td>Mikrobiyolojik limit</td><td>TPK < 10^3</td><td>Küf/maya < 100</td></tr>
-                <tr><td>Ağır metal</td><td>Pb < 0.1 ppm</td><td>Pb < 1 ppm</td></tr>
-                <tr><td>Regülasyon</td><td>Türk Gıda Kodeksi</td><td>Kozmetik Yönetmeliği</td></tr>
+                <table class="w-full text-sm"> <tr><th class="text-gold p-1">Parametre</th><th class="text-gold p-1">Probiyotik İçecek</th><th class="text-gold p-1">Niasinamid Tonik</th></tr>
+                <tr class="text-gray-light"><td class="p-1">Mikrobiyolojik limit</td><td class="p-1">TPK < 10^3</td><td class="p-1">Küf/maya < 100</td></tr>
+                <tr class="text-gray-light"><td class="p-1">Ağır metal</td><td class="p-1">Pb < 0.1 ppm</td><td class="p-1">Pb < 1 ppm</td></tr>
+                <tr class="text-gray-light"><td class="p-1">Regülasyon</td><td class="p-1">Türk Gıda Kodeksi</td><td class="p-1">Kozmetik Yönetmeliği</td></tr>
                 </table>
             </div>
             <div class="card p-6">
                 <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-rocket mr-2"></i>Startup Kurulum Planı</h2>
                 <div class="grid md:grid-cols-3 gap-4 text-sm">
-                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Min. Yatırım</p><p>Makine: 1.5M ₺<br>AR-GE: 400k ₺<br>Toplam ~2.45M ₺</p></div>
-                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Yıllık Maliyet (100k adet)</p><p>Hammadde: 1.2M ₺<br>Toplam: 2.33M ₺</p></div>
-                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Kar Marjı</p><p>Ort. satış 90 ₺, gelir 9M ₺<br>Net kar marjı ~%53</p></div>
+                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Min. Yatırım</p><p class="text-gray-light">Makine: 1.5M ₺<br>AR-GE: 400k ₺<br>Toplam ~2.45M ₺</p></div>
+                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Yıllık Maliyet (100k adet)</p><p class="text-gray-light">Hammadde: 1.2M ₺<br>Toplam: 2.33M ₺</p></div>
+                    <div class="bg-[#0f2c44] p-3 rounded"><p class="text-gold font-bold">Kar Marjı</p><p class="text-gray-light">Ort. satış 90 ₺, gelir 9M ₺<br>Net kar marjı ~%53</p></div>
                 </div>
             </div>
         `;
@@ -350,9 +360,9 @@
                     </div>
                     <div class="bg-[#0f2c44] p-4 rounded-xl">
                         <h3 class="text-gold font-bold mb-3">Hesaplanan Değerler</h3>
-                        <p>Kostik (NaOH/KOH) : <span id="lyeAmount" class="text-gold font-bold">0</span> gr</p>
-                        <p>Su Miktarı : <span id="waterAmountResult" class="text-gold font-bold">0</span> gr</p>
-                        <p>Toplam Ağırlık : <span id="totalWeight" class="text-gold font-bold">0</span> gr</p>
+                        <p class="text-gray-light">Kostik (NaOH/KOH) : <span id="lyeAmount" class="text-gold font-bold">0</span> gr</p>
+                        <p class="text-gray-light">Su Miktarı : <span id="waterAmountResult" class="text-gold font-bold">0</span> gr</p>
+                        <p class="text-gray-light">Toplam Ağırlık : <span id="totalWeight" class="text-gold font-bold">0</span> gr</p>
                         <button class="mt-4 btn-gold w-full py-2 rounded-lg" onclick="whatsappLink('Sabun hesaplama sonucu: Kostik: '+document.getElementById('lyeAmount').innerText+' gr, Su: '+document.getElementById('waterAmountResult').innerText+' gr')">Sonucu WhatsApp ile Paylaş</button>
                     </div>
                 </div>
@@ -415,9 +425,9 @@
                     <span><i class="fab fa-whatsapp text-gold mr-1"></i> 0540 966 6602</span>
                     <span><i class="fas fa-envelope text-gold mr-1"></i> orhanboyraz0216@gmail.com</span>
                     <span><i class="fas fa-map-marker-alt text-gold mr-1"></i> Agora Çarşısı No: Z/31 Nilüfer/BURSA</span>
-                    <span><i class="fas fa-globe text-gold mr-1"></i> https://anadolunetwork.tr/</span>
+                    <span><i class="fas fa-globe text-gold mr-1"></i> <a href="https://anadolunetwork.tr/" target="_blank" class="hover:underline">anadolunetwork.tr</a></span>
                 </div>
-                <p>© 2025 Doğal Ar-Ge Üretim Platformu – GMP, ISO 22716, FDA Uyumlu | Tüm formüller tescillidir.</p>
+                <p>© 2025 Ar-Ge Üretim Platformu – GMP, ISO 22716, FDA Uyumlu | Tüm formüller tescillidir.</p>
             </footer>
         `;
     }
