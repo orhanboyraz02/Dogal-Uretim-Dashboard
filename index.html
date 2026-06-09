@@ -2,346 +2,330 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ar-Ge & Üretim Simülasyonu | BioEndoVance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ar-Ge Üretim Platformu |Doğal Gıda & Kozmetik Formülasyon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #f0f4f8;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            padding: 30px 20px;
-        }
-        .dashboard {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .header {
-            background: #1c3b2f;
-            color: #f9e0a8;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .header h1 { font-weight: 600; letter-spacing: -0.5px; }
-        .badge {
-            background: #e9b35f;
-            color: #1c3b2f;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 30px;
-            padding: 30px;
-        }
-        .card {
-            background: #fff;
-            border-radius: 28px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            padding: 24px;
-            transition: all 0.2s;
-            border: 1px solid #e2e8f0;
-        }
-        .card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            border-left: 5px solid #e9b35f;
-            padding-left: 15px;
-            color: #1c3b2f;
-        }
-        label {
-            font-weight: 600;
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
-            color: #2c5a47;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 60px;
-            border: 1px solid #cddfd7;
-            background: #fefefe;
-            font-size: 1rem;
-        }
-        button {
-            margin-top: 20px;
-            background: #1c3b2f;
-            color: white;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            width: 100%;
-        }
-        button:hover {
-            background: #e9b35f;
-            color: #1c3b2f;
-        }
-        .result {
-            background: #eef4ea;
-            padding: 16px;
-            border-radius: 20px;
-            margin-top: 20px;
-            font-family: monospace;
-            font-size: 0.9rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        th, td {
-            text-align: left;
-            padding: 8px 4px;
-            border-bottom: 1px solid #ddd;
-        }
-        .footer {
-            background: #faf9f5;
-            padding: 20px 30px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #6b6f6d;
-            border-top: 1px solid #e2e8f0;
-        }
-        @media (max-width: 700px) {
-            .grid-2 { grid-template-columns: 1fr; }
-        }
+        * { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(135deg, #0a2b4e 0%, #0f3b6a 100%); min-height: 100vh; }
+        .text-gold { color: #f5b042 !important; }
+        .bg-gold { background-color: #f5b042; }
+        .btn-gold { background: linear-gradient(135deg, #f5b042 0%, #e09d2c 100%); color: #0a2b4e; font-weight: 700; transition: 0.2s; }
+        .btn-gold:hover { transform: scale(1.02); opacity: 0.95; }
+        .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(2px); border-radius: 1.5rem; border: 1px solid rgba(245,176,66,0.3); transition: 0.2s; }
+        .card:hover { border-color: #f5b042; transform: translateY(-2px); }
+        .input-group input, .input-group select { background: #0f2c44; border: 1px solid #f5b04260; color: white; border-radius: 0.75rem; padding: 0.5rem 0.75rem; width: 100%; }
+        .input-group label { color: #f5b042; font-weight: 600; margin-bottom: 0.25rem; display: block; }
+        .table-custom th { color: #f5b042; border-bottom: 1px solid #f5b04240; }
+        .table-custom td { border-bottom: 1px solid #2c4c6e; }
     </style>
 </head>
-<body>
-<div class="dashboard">
-    <div class="header">
-        <h1>🌿 BioEndoVance Ar‑Ge Merkezi</h1>
-        <div class="badge">Üretim & Maliyet Simülatörü | GMP / ISO Uyumlu</div>
-    </div>
+<body class="text-white">
 
-    <div class="grid-2">
-        <!-- SOL: GIDA ÜRÜN FORMÜLASYONU -->
-        <div class="card">
-            <h3>🍜 Gıda Formülü (CURCUMIN Gold Shot)</h3>
-            <label>Üretim miktarı (adet) *30 mL flakon</label>
-            <input type="number" id="gida_adet" value="10000" step="1000">
-            
-            <label>Lipozomal Kurkumin (%)</label>
-            <input type="number" id="kurkumin" value="2.5" step="0.1">
-            <label>Piperin (%)</label>
-            <input type="number" id="piperin" value="0.1" step="0.05">
-            <label>Zencefil oleoresin (%)</label>
-            <input type="number" id="zencefil" value="0.5" step="0.1">
-            <label>Lesitin (ayçiçek) (%)</label>
-            <input type="number" id="lesitin" value="3.0" step="0.2">
-            
-            <label>Birim ambalaj maliyeti (cam flakon + kapak + etiket) ₺</label>
-            <input type="number" id="ambalaj_gida" value="1.8" step="0.1">
-            
-            <label>İşçilik + enerji + genel gider (₺ / adet)</label>
-            <input type="number" id="isletme_gida" value="1.2" step="0.1">
-            
-            <button onclick="hesaplaGida()">📊 MALİYET & KAR MARJI HESAPLA</button>
-            <div id="gidaSonuc" class="result">Henüz hesaplanmadı.</div>
+<div class="max-w-7xl mx-auto px-4 py-6">
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-flask text-gold text-3xl"></i>
+            <h1 class="text-3xl font-bold text-gold">Ar-Ge Üretim Platformu</h1>
+            <span class="bg-gold/20 text-gold text-xs px-3 py-1 rounded-full">GMP | ISO | FDA Uyumlu</span>
         </div>
-
-        <!-- SAĞ: KOZMETİK FORMÜLASYONU -->
-        <div class="card">
-            <h3>🧴 Kozmetik Formülü (ROSACALM Krem)</h3>
-            <label>Üretim miktarı (adet) *50 mL</label>
-            <input type="number" id="kozmetik_adet" value="5000" step="500">
-            
-            <label>Yeşil çay ekstraktı (%)</label>
-            <input type="number" id="yecayi" value="2.0" step="0.2">
-            <label>Avenantramid (%)</label>
-            <input type="number" id="aven" value="0.8" step="0.1">
-            <label>Glukonolakton (PHA) (%)</label>
-            <input type="number" id="pha" value="4.0" step="0.2">
-            <label>Skualan (%)</label>
-            <input type="number" id="skualan" value="5.0" step="0.5">
-            
-            <label>Birim ambalaj maliyeti (hava geçirmez pompalı şişe) ₺</label>
-            <input type="number" id="ambalaj_koz" value="3.2" step="0.2">
-            
-            <label>İşçilik + üretim giderleri (₺ / adet)</label>
-            <input type="number" id="isletme_koz" value="2.0" step="0.2">
-            
-            <button onclick="hesaplaKozmetik()">💄 MALİYET & KAR MARJI HESAPLA</button>
-            <div id="kozmetikSonuc" class="result">Henüz hesaplanmadı.</div>
+        <div class="text-right">
+            <p class="text-sm text-gold">Kıdemli Ar-Ge Direktörü</p>
+            <p class="text-xs text-gray-300">Fitokimya & Kozmetik Formülasyon</p>
         </div>
     </div>
 
-    <!-- YATIRIM ÖZETİ BÖLÜMÜ -->
-    <div class="card" style="margin: 0 30px 30px 30px;">
-        <h3>📌 Startup Minimum Yatırım Bütçesi (1 Yıllık Operasyon)</h3>
-        <div id="yatirimOzet" class="result">
-            ⚡ Henüz maliyet hesaplanmadı. Lütfen yukarıdaki butonları kullanarak hesaplama yapın.
+    <!-- 1. ÜRÜN KONSEPTLERİ -->
+    <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-lightbulb mr-2"></i>1. Ürün Konseptleri (5 Gıda / 5 Kozmetik)</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-xl font-semibold text-gold mb-2">🍏 Fonksiyonel Gıdalar</h3>
+                <table class="w-full text-sm table-custom">
+                    <thead><tr><th>Ürün</th><th>Hedef Kullanıcı</th><th>Temel Fayda</th><th>Aktif Bileşenler</th></tr></thead>
+                    <tbody>
+                        <tr><td>Probiyotik Fermente İçecek</td><td>Bağırsak sağlığı sorunu olanlar</td><td>Bağırsak florasını düzenler</td><td>Lactobacillus, İnülin, Zencefil</td></tr>
+                        <tr><td>Adaptojen Bitki Çayı</td><td>Yoğun stres altındaki bireyler</td><td>Kortizol düşürücü</td><td>Ashwagandha, Rhodiola, Melisa</td></tr>
+                        <tr><td>Kolajenlı Vegan Bar</td><td>Sporcular, yaşlanma karşıtı</td><td>Cilt esnekliği, eklem desteği</td><td>Bitkisel kolajen, C vitamini, Kuşburnu</td></tr>
+                        <tr><td>Omega-3 Kapsül (Alg bazlı)</td><td>Veganlar, kalp dostu</td><td>Kardiyovasküler koruma</td><td>Alg DHA/EPA, Vitamin E</td></tr>
+                        <tr><td>Moringa Toz Karışımı</td><td>Vitamin mineral eksikliği</td><td>Bağışıklık güçlendirme</td><td>Moringa, Spirulina, Hindiba</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold text-gold mb-2">💄 Doğal Kozmetikler</h3>
+                <table class="w-full text-sm table-custom">
+                    <thead><tr><th>Ürün</th><th>Hedef Kullanıcı</th><th>Temel Fayda</th><th>Aktif Bileşenler</th></tr></thead>
+                    <tbody>
+                        <tr><td>Niasinamidli Arındırıcı Tonik</td><td>Akne eğilimli cilt</td><td>Gözenek sıkılaştırma</td><td>Niasinamid, Gül suyu, Çay ağacı</td></tr>
+                        <tr><td>Retinol Alternatif Serum</td><td>Olgun cilt</td><td>Kırışıklık azaltma</td><td>Bakuchiol, Hiyalüronik asit, Aloe</td></tr>
+                        <tr><td>Shea ve Balmumu Nemlendirici</td><td>Kuru/egzamalı cilt</td><td>Yoğun onarım</td><td>Shea, Balmumu, Lavanta yağı</td></tr>
+                        <tr><td>Kükürtsüz Saç Şampuan Barı</td><td>Saç dökülmesi</td><td>Saç köklerini güçlendirme</td><td>Bıttım yağı, Defne, Isırgan</td></tr>
+                        <tr><td>Enzimatik Cilt Aydınlatıcı Maske</td><td>Leke problemi</td><td>Eksfoliasyon + parlaklık</td><td>Papain, Ananas enzimi, Kil</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <button onclick="hesaplaYatirim()">💰 1 YILLIK YATIRIM & KAR PROJEKSİYONU</button>
     </div>
 
-    <div class="footer">
-        © 2025 BioEndoVance Ar‑Ge – Sürdürülebilir Doğal Ürünler | GMP Hazır, ISO 22716, FDA/EMA uyumlu formülasyonlar
+    <!-- 2. FORMÜLASYON TASARIMI (Seçili Ürünler: Probiyotik İçecek + Niasinamidli Tonik) -->
+    <div class="grid md:grid-cols-2 gap-8 mb-8">
+        <!-- GIDA FORMÜLÜ -->
+        <div class="card p-6">
+            <h3 class="text-xl font-bold text-gold mb-3">🥤 Probiyotik Fermente İçecek (Gıda)</h3>
+            <table class="w-full text-sm mb-4">
+                <tr><td class="text-gold font-semibold">Hammadde</td><td class="text-gold font-semibold">% Oran</td><td class="text-gold font-semibold">Fonksiyon</td></tr>
+                <tr><td>Peynir altı suyu (veya bitki sütü)</td><td>85%</td><td>Fermentasyon bazı</td></tr>
+                <tr><td>İnülin (prebiyotik lif)</td><td>5%</td><td>Probiyotik besini</td></tr>
+                <tr><td>Lactobacillus plantarum (starter)</td><td>2%</td><td>Probiyotik kültür</td></tr>
+                <tr><td>Zencefil konsantresi</td><td>3%</td><td>Antioksidan / aroma</td></tr>
+                <tr><td>Stevia (doğal tatlandırıcı)</td><td>0.5%</td><td>Tatlılık</td></tr>
+                <tr><td>Su</td><td>4.5%</td><td>Kıvam ayarı</td></tr>
+            </table>
+            <div class="bg-[#0f2c44] p-3 rounded-lg text-sm">
+                <p><span class="text-gold font-semibold">Stabilite:</span> 4°C'de 28 gün, pH 3.8-4.2, canlı probiyotik >10^6 cfu/ml</p>
+                <p><span class="text-gold font-semibold">Raf ömrü:</span> 6 ay (soğuk zincir)</p>
+                <p><span class="text-gold font-semibold">Koruyucu:</span> Doğal (Phytocidin, biberiye özütü 0.1%)</p>
+                <p><span class="text-gold font-semibold">Üretim koşulu:</span> 37°C fermentasyon 24s, pastörizasyon 72°C 15sn</p>
+            </div>
+        </div>
+        <!-- KOZMETİK FORMÜLÜ -->
+        <div class="card p-6">
+            <h3 class="text-xl font-bold text-gold mb-3">💧 Niasinamidli Arındırıcı Tonik (Kozmetik)</h3>
+            <table class="w-full text-sm mb-4">
+                <tr><td class="text-gold font-semibold">Hammadde</td><td class="text-gold font-semibold">% Oran</td><td class="text-gold font-semibold">Fonksiyon</td></tr>
+                <tr><td>Gül hidrosolü</td><td>70%</td><td>Sulu baz, yatıştırıcı</td></tr>
+                <tr><td>Niasinamid (B3)</td><td>5%</td><td>Gözenek sıkılaştırma, leke</td></tr>
+                <tr><td>Pentilen glikol (doğal türev)</td><td>3%</td><td>Nemlendirici, koruyucu yardımcı</td></tr>
+                <tr><td>Çay ağacı hidrolatı</td><td>10%</td><td>Antibakteriyel</td></tr>
+                <tr><td>Propanediol (bitkisel)</td><td>8%</td><td>Arttırılmış penetrasyon</td></tr>
+                <tr><td>Limon otu yağı</td><td>0.5%</td><td>Koku + antioksidan</td></tr>
+                <tr><td>Potasyum sorbat (doğal koruyucu)</td><td>0.5%</td><td>Küf/maya engelleyici</td></tr>
+            </table>
+            <div class="bg-[#0f2c44] p-3 rounded-lg text-sm">
+                <p><span class="text-gold font-semibold">Stabilite:</span> 25°C/40°C, 3 ay, pH 5.2-5.8</p>
+                <p><span class="text-gold font-semibold">Raf ömrü:</span> 18 ay (oda sıcaklığı)</p>
+                <p><span class="text-gold font-semibold">Koruyucu sistem:</span> Potasyum sorbat + Propanediol (sinerjik)</p>
+                <p><span class="text-gold font-semibold">Üretim:</span> Soğuk proses (40°C altı), steril filtrasyon</p>
+            </div>
+        </div>
     </div>
+
+    <!-- 3. MALİYET & FİYAT HESAPLAMA ARACI (Dinamik) -->
+    <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-chart-line mr-2"></i>3. Maliyet & Satış Fiyatı Simülatörü</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label class="text-gold font-semibold block mb-1">Ürün Tipi</label>
+                <select id="productType" class="w-full p-2 bg-[#0f2c44] border border-gold/50 rounded-lg">
+                    <option value="probiotic">Probiyotik İçecek (250 ml)</option>
+                    <option value="tonic">Niasinamid Tonik (100 ml)</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-gold font-semibold block mb-1">Hammadde Maliyeti (₺/kg veya litre)</label>
+                <input type="number" id="rawCost" value="45" class="w-full p-2 bg-[#0f2c44] border border-gold/50 rounded-lg">
+            </div>
+            <div>
+                <label class="text-gold font-semibold block mb-1">Ambalaj Maliyeti (₺/adet)</label>
+                <input type="number" id="packCost" value="3.5" class="w-full p-2 bg-[#0f2c44] border border-gold/50 rounded-lg">
+            </div>
+            <div>
+                <label class="text-gold font-semibold block mb-1">İşçilik + Genel Gider (₺/adet)</label>
+                <input type="number" id="overheadCost" value="2.8" class="w-full p-2 bg-[#0f2c44] border border-gold/50 rounded-lg">
+            </div>
+            <div>
+                <label class="text-gold font-semibold block mb-1">Hedef Kar Marjı (%)</label>
+                <input type="number" id="profitMargin" value="45" class="w-full p-2 bg-[#0f2c44] border border-gold/50 rounded-lg">
+            </div>
+            <div class="flex items-end">
+                <button id="calcBtn" class="btn-gold w-full py-2 rounded-lg font-bold"><i class="fas fa-calculator mr-2"></i>Hesapla</button>
+            </div>
+        </div>
+        <div class="mt-6 p-4 bg-[#0f2c44] rounded-xl">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div><p class="text-gray-300 text-sm">Birim Hammadde</p><p id="unitRaw" class="text-xl font-bold text-gold">0 ₺</p></div>
+                <div><p class="text-gray-300 text-sm">Toplam Üretim Maliyeti</p><p id="totalCost" class="text-xl font-bold text-gold">0 ₺</p></div>
+                <div><p class="text-gray-300 text-sm">Önerilen Satış Fiyatı</p><p id="sellPrice" class="text-xl font-bold text-gold">0 ₺</p></div>
+                <div><p class="text-gray-300 text-sm">Birim Kar</p><p id="profit" class="text-xl font-bold text-green-400">0 ₺</p></div>
+            </div>
+            <div class="mt-3 text-xs text-gray-400 text-center" id="formulaDetail"></div>
+        </div>
+    </div>
+
+    <!-- 4. ÜRETİM SÜRECİ VE MAKİNE LİSTESİ -->
+    <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-industry mr-2"></i>4. Endüstriyel Üretim Hattı (GMP uyumlu)</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-lg font-semibold text-gold mb-2">🥤 Probiyotik İçecek Hattı</h3>
+                <ul class="list-disc list-inside text-sm space-y-1">
+                    <li>Ham madde kabul ve analiz (HPLC, mikrobiyoloji)</li>
+                    <li>Karıştırma tankı (paslanmaz çelik 316L, 1000L)</li>
+                    <li>Homojenizasyon (200 bar)</li>
+                    <li>Pastörizasyon (PHE, 72°C/15sn)</li>
+                    <li>Fermantasyon tankı (37°C, 24s, karıştırmalı)</li>
+                    <li>Soğuk dolum (izobarik, 4°C)</li>
+                    <li>Etiketleme, paketleme, metal dedektör</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-gold mb-2">💧 Niasinamid Tonik Hattı</h3>
+                <ul class="list-disc list-inside text-sm space-y-1">
+                    <li>Hidrosol üretimi (bakır imbik)</li>
+                    <li>Doğal ekstrakt hazırlama (macerasyon)</li>
+                    <li>Karıştırma reaktörü (çift cidarlı, 500L)</li>
+                    <li>Derin filtrasyon (0.45 μm)</li>
+                    <li>Steril dolum (sınıf D ortamı)</li>
+                    <li>Bot etiketleme, koli paketleme</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-4 p-3 bg-[#0f2c44] rounded-lg text-sm">
+            <p><span class="text-gold font-semibold">Gerekli Makineler (Tahmini Yatırım):</span> Karıştırıcılar (₺450k), Pastörizatör (₺300k), Dolum makinesi (₺250k), Su arıtma (₺200k), Etiketleme (₺80k). <span class="text-gold">Toplam ~1.5M ₺ (küçük ölçekli üretim hattı)</span></p>
+        </div>
+    </div>
+
+    <!-- 5. KALİTE VE GÜVENLİK TABLOSU -->
+    <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-clipboard-list mr-2"></i>5. Kalite & Regülasyon</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead><tr class="border-b border-gold/50"><th class="text-left p-2 text-gold">Parametre</th><th class="text-left p-2 text-gold">Probiyotik İçecek</th><th class="text-left p-2 text-gold">Niasinamid Tonik</th></tr></thead>
+                <tbody>
+                    <tr><td class="p-2">Mikrobiyolojik limit</td><td class="p-2">TPK < 10^3 cfu/g, Koliform yok</td><td class="p-2">Küf/maya < 100 cfu/g</td></tr>
+                    <tr><td class="p-2">Ağır metal</td><td class="p-2">Pb < 0.1 ppm, As < 0.2 ppm</td><td class="p-2">Pb < 1 ppm, Hg < 0.1 ppm</td></tr>
+                    <tr><td class="p-2">Alerjen</td><td class="p-2">Laktoz (içerir) — etiketleme zorunlu</td><td class="p-2">Gluten yok, fındık yok</td></tr>
+                    <tr><td class="p-2">Regülasyon</td><td class="p-2">Türk Gıda Kodeksi, AB Novel Food</td><td class="p-2">Kozmetik Yönetmeliği, CPNP bildirimi</td></tr>
+                    <tr><td class="p-2">Stabilite testi</td><td class="p-2">25°C/6 ay (canlı probiyotik düşüşü <1 log)</td><td class="p-2">40°C/3 ay (pH, viskozite, renk)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 6. TİCARİLEŞTİRME VE PAZAR ANALİZİ -->
+    <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-chart-simple mr-2"></i>6. Ticarileştirme Stratejisi</h2>
+        <div class="grid md:grid-cols-2 gap-6 text-sm">
+            <div><span class="text-gold font-bold">Marka konumu:</span> Bilimsel kanıtlı, doğal, sürdürülebilir. "Ar-Ge Laboratuvarından Cildinize/Gıdanıza"</div>
+            <div><span class="text-gold font-bold">Hedef pazar segmenti:</span> 25-45 yaş, bilinçli tüketici, vegan, temiz etiket</div>
+            <div><span class="text-gold font-bold">Fiyatlandırma modeli:</span> Premium orta segment (probiyotik 45₺, tonik 180₺)</div>
+            <div><span class="text-gold font-bold">Dağıtım kanalları:</span> Online (Trendyol, kendi e-ticaret), Doğal ürün dükkanları, Eczane (kozmetik)</div>
+            <div><span class="text-gold font-bold">Rekabet avantajı:</span> Doğal koruyucu sistem, patent adayı formülasyon, soğuk zincirsiz stabilite (tonik)</div>
+        </div>
+    </div>
+
+    <!-- 7. AR-GE YENİLİKLERİ VE PATENT -->
+    <div class="card p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-microscope mr-2"></i>7. Yenilikçi Ar-Ge & Patentlenebilir Fikirler</h2>
+        <ul class="list-disc list-inside space-y-2 text-sm">
+            <li><span class="text-gold">Lipozomal bitki ekstraktı:</span> Probiyotik içecekte zencefil biyoyararlanımını artıran lipozom enkapsülasyonu (patent başvurusu).</li>
+            <li><span class="text-gold">Çift katmanlı doğal koruyucu sistem:</span> Propolis + Propanediol + Potasyum sorbat (sinerjik, 12 ay raf ömrü).</li>
+            <li><span class="text-gold">Nanoemülsiyon tonik:</span> Niasinamid ve uçucu yağların deri penetrasyonunu artıran nano-taşıyıcı (PCT patentlenebilir).</li>
+            <li><span class="text-gold">Sürdürülebilir ambalaj:</span> Deniz yosunu bazlı biyoplastik şişe (karbon ayak izi %70 daha düşük).</li>
+        </ul>
+    </div>
+
+    <!-- 8. STARTUP KURULUM PLANI VE YATIRIM BÜTÇESİ -->
+    <div class="card p-6">
+        <h2 class="text-2xl font-bold text-gold mb-4"><i class="fas fa-rocket mr-2"></i>8. Startup Kurulum Planı (1 Yıllık)</h2>
+        <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="bg-[#0f2c44] p-3 rounded-xl">
+                <p class="text-gold font-bold">📋 Minimum Yatırım Bütçesi</p>
+                <p>Makine ekipman: 1.500.000 ₺</p>
+                <p>AR-GE/Test/Lisans: 400.000 ₺</p>
+                <p>Ambalaj kalıp/ilk parti: 250.000 ₺</p>
+                <p>Pazarlama & E-ticaret: 300.000 ₺</p>
+                <p><span class="text-gold">Toplam = 2.450.000 ₺</span></p>
+            </div>
+            <div class="bg-[#0f2c44] p-3 rounded-xl">
+                <p class="text-gold font-bold">📊 Yıllık Üretim Maliyeti Tahmini (100.000 adet)</p>
+                <p>Hammadde: 1.200.000 ₺</p>
+                <p>Ambalaj: 350.000 ₺</p>
+                <p>İşçilik (4 operatör): 480.000 ₺</p>
+                <p>Genel gider + Enerji: 300.000 ₺</p>
+                <p><span class="text-gold">Toplam maliyet = 2.330.000 ₺</span></p>
+            </div>
+            <div class="bg-[#0f2c44] p-3 rounded-xl">
+                <p class="text-gold font-bold">💰 Kar Marjı Analizi (Ortalama)</p>
+                <p>Ort. satış fiyatı (karışık ürün): 90 ₺</p>
+                <p>Yıllık gelir: 100.000 × 90 = 9.000.000 ₺</p>
+                <p>Brüt kar: 6.670.000 ₺</p>
+                <p>Net kar marjı: <span class="text-gold font-bold">~%53</span></p>
+                <p>Yatırım geri dönüşü: <span class="text-gold">6-8 ay</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="mt-12 pt-6 border-t border-gold/30 text-center text-gray-400 text-sm">
+        <div class="flex flex-wrap justify-center gap-6 mb-2">
+            <span><i class="fas fa-user-circle text-gold mr-1"></i> Ar-Ge Direktörü: Orhan BOYRAZ</span>
+            <span><i class="fab fa-whatsapp text-gold mr-1"></i> 0541 866 0202</span>
+            <span><i class="fas fa-envelope text-gold mr-1"></i> orhanboyraz0216@gmail.com</span>
+            <span><i class="fas fa-map-marker-alt text-gold mr-1"></i> Agora Çarşısı No: Z/31 Nilüfer/BURSA</span>
+            <span><i class="fas fa-globe text-gold mr-1"></i> anadolunetwork.tr</span>
+        </div>
+        <p>© 2025 Ar-Ge Üretim Platformu – GMP, ISO 22716, FDA Uyumlu | Tüm formüller tescillidir, izinsiz kullanılamaz.</p>
+    </footer>
 </div>
 
 <script>
-    // Global değişkenler (hesaplanan değerler)
-    let gMaliyetBirim = 0, gKarOrani = 0, gToplamMaliyet = 0, gSatisFiyati = 0;
-    let kMaliyetBirim = 0, kKarOrani = 0, kToplamMaliyet = 0, kSatisFiyati = 0;
-
-    // Hammaddelerin kg başına yaklaşık endüstriyel fiyatları (₺)
-    const hamFiyat = {
-        kurkumin: 1450,    // ₺/kg %95 lipozomal kompleks
-        piperin: 320,      // ₺/kg
-        zencefil: 280,
-        lesitin: 90,
-        yecayi: 980,       // yeşil çay ekstraktı yüksek polifenol
-        aven: 5200,        // avenantramid (pahalı)
-        pha: 450,          // glukonolakton
-        skualan: 380
-    };
-
-    function hesaplaGida() {
-        let adet = parseFloat(document.getElementById('gida_adet').value);
-        let pKurk = parseFloat(document.getElementById('kurkumin').value);
-        let pPip = parseFloat(document.getElementById('piperin').value);
-        let pZence = parseFloat(document.getElementById('zencefil').value);
-        let pLes = parseFloat(document.getElementById('lesitin').value);
-        let ambalaj = parseFloat(document.getElementById('ambalaj_gida').value);
-        let isletme = parseFloat(document.getElementById('isletme_gida').value);
-        
-        if (isNaN(adet) || adet <= 0) return;
-        
-        // Birim formülasyon için toplam kuru madde oranı (su hariç)
-        let toplamYuzde = pKurk + pPip + pZence + pLes;  // yaklaşık %6.1
-        // 30 mL flakon = ~30 gram (yoğunluk ~1)
-        let birimAg = 30; // gram
-        let aktifKuruGram = birimAg * (toplamYuzde / 100);
-        
-        // kg cinsinden her bileşenin maliyeti
-        let maliyetHam = 
-            (pKurk / 100) * birimAg * (hamFiyat.kurkumin / 1000) +
-            (pPip / 100) * birimAg * (hamFiyat.piperin / 1000) +
-            (pZence / 100) * birimAg * (hamFiyat.zencefil / 1000) +
-            (pLes / 100) * birimAg * (hamFiyat.lesitin / 1000);
-        
-        let birimMaliyet = maliyetHam + ambalaj + isletme;
-        let toplamMaliyet = birimMaliyet * adet;
-        
-        // satış fiyatı: Pazar araştırmasına göre 42-49₺ hedef; ~kar marjı %45-55
-        let satisFiyati = birimMaliyet * 1.85;  // %85 marj
-        let karBirim = satisFiyati - birimMaliyet;
-        let karOrani = (karBirim / birimMaliyet) * 100;
-        
-        gMaliyetBirim = birimMaliyet;
-        gKarOrani = karOrani;
-        gToplamMaliyet = toplamMaliyet;
-        gSatisFiyati = satisFiyati;
-        
-        document.getElementById('gidaSonuc').innerHTML = `
-            <table>
-                <tr><th>Parametre</th><th>Değer (₺)</th></tr>
-                <tr><td>Birim maliyet (30 mL)</td><td><b>${birimMaliyet.toFixed(2)} ₺</b></td></tr>
-                <tr><td>Önerilen satış fiyatı</td><td><b>${satisFiyati.toFixed(2)} ₺</b></td></tr>
-                <tr><td>Birim kar</td><td>${karBirim.toFixed(2)} ₺</td></tr>
-                <tr><td>Kar marjı</td><td>${karOrani.toFixed(1)}%</td></tr>
-                <tr><td>Toplam üretim maliyeti (${adet} adet)</td><td>${toplamMaliyet.toFixed(0)} ₺</td></tr>
-            </table>
-            <small>🔬 Hammadde kalitesi: farmasötik derece, GMP sertifikalı tesis.</small>
-        `;
-    }
-    
-    function hesaplaKozmetik() {
-        let adet = parseFloat(document.getElementById('kozmetik_adet').value);
-        let pYesil = parseFloat(document.getElementById('yecayi').value);
-        let pAven = parseFloat(document.getElementById('aven').value);
-        let pHav = parseFloat(document.getElementById('pha').value);
-        let pSkualan = parseFloat(document.getElementById('skualan').value);
-        let ambalaj = parseFloat(document.getElementById('ambalaj_koz').value);
-        let isletme = parseFloat(document.getElementById('isletme_koz').value);
-        
-        if (isNaN(adet) || adet <=0) return;
-        
-        let birimAg = 52; // gram (50 mL + yoğunluk ≈ 1.04)
-        let toplamYuzde = pYesil + pAven + pHav + pSkualan;
-        let aktifMaliyet = 
-            (pYesil/100)*birimAg*(hamFiyat.yecayi/1000) +
-            (pAven/100)*birimAg*(hamFiyat.aven/1000) +
-            (pHav/100)*birimAg*(hamFiyat.pha/1000) +
-            (pSkualan/100)*birimAg*(hamFiyat.skualan/1000);
-        
-        let birimMaliyet = aktifMaliyet + ambalaj + isletme;
-        let toplamMaliyet = birimMaliyet * adet;
-        let satisFiyati = birimMaliyet * 2.2;  // Premium segment için %120 marj
-        let karBirim = satisFiyati - birimMaliyet;
-        let karOrani = (karBirim / birimMaliyet)*100;
-        
-        kMaliyetBirim = birimMaliyet;
-        kKarOrani = karOrani;
-        kToplamMaliyet = toplamMaliyet;
-        kSatisFiyati = satisFiyati;
-        
-        document.getElementById('kozmetikSonuc').innerHTML = `
-            <table>
-                <tr><th>Parametre</th><th>Değer (₺)</th></tr>
-                <tr><td>Birim maliyet (50 mL)</td><td><b>${birimMaliyet.toFixed(2)} ₺</b></td></tr>
-                <tr><td>Önerilen satış fiyatı</td><td><b>${satisFiyati.toFixed(2)} ₺</b></td></tr>
-                <tr><td>Birim kar</td><td>${karBirim.toFixed(2)} ₺</td></tr>
-                <tr><td>Kar marjı</td><td>${karOrani.toFixed(1)}%</td></tr>
-                <tr><td>Toplam üretim maliyeti (${adet} adet)</td><td>${toplamMaliyet.toFixed(0)} ₺</td></tr>
-            </table>
-            <small>🧪 Dermatolojik testler tamamlandı, stabilite geçerli (ICH).</small>
-        `;
-    }
-    
-    function hesaplaYatirim() {
-        if (gMaliyetBirim === 0 && kMaliyetBirim === 0) {
-            document.getElementById('yatirimOzet').innerHTML = "⚠️ Lütfen önce ürün hesaplamalarını yapın (Gıda ve Kozmetik butonları).";
-            return;
+    // Maliyet hesaplama mantığı
+    const productData = {
+        probiotic: { 
+            name: "Probiyotik İçecek (250 ml)",
+            rawMatPerUnit: 0.250,   // 250 ml x hammadde kg fiyat (2.5 dL)
+            formula: "%85 baz, %5 inülin, %2 starter, %3 zencefil, %0.5 stevia, %4.5 su"
+        },
+        tonic: { 
+            name: "Niasinamid Tonik (100 ml)",
+            rawMatPerUnit: 0.100,
+            formula: "%70 hidrosol, %5 niasinamid, %10 çay ağacı, %8 propanediol, %3 pentilen glikol, %0.5 limon otu, %0.5 potasyum sorbat"
         }
-        let gAdet = parseFloat(document.getElementById('gida_adet').value) || 0;
-        let kAdet = parseFloat(document.getElementById('kozmetik_adet').value) || 0;
-        let gTop = gMaliyetBirim * gAdet;
-        let kTop = kMaliyetBirim * kAdet;
-        let toplamUretimMaliyeti = gTop + kTop;
-        let toplamCiro = (gSatisFiyati * gAdet) + (kSatisFiyati * kAdet);
-        let toplamKar = toplamCiro - toplamUretimMaliyeti;
+    };
+    
+    const rawCostInput = document.getElementById('rawCost');
+    const packCostInput = document.getElementById('packCost');
+    const overheadInput = document.getElementById('overheadCost');
+    const marginInput = document.getElementById('profitMargin');
+    const productSelect = document.getElementById('productType');
+    const calcBtn = document.getElementById('calcBtn');
+    
+    function calculate() {
+        let prodType = productSelect.value;
+        let rawCostPerKg = parseFloat(rawCostInput.value);
+        let pack = parseFloat(packCostInput.value);
+        let overhead = parseFloat(overheadInput.value);
+        let margin = parseFloat(marginInput.value);
         
-        // 1 yıl boyunca sabit giderler (kiralama, lisans, personel, pazarlama)
-        let yillikSabit = 1850000; // ₺ (küçük ölçekli üretim tesisi, 4 personel, ofis)
-        let netYillikKar = toplamKar * 2; // yılda 2 parti üretim varsayımı
-        let yatirimBaslangic = 3200000;   // makine, ekipman, ruhsat, Ar-Ge
+        if (isNaN(rawCostPerKg)) rawCostPerKg = 0;
+        if (isNaN(pack)) pack = 0;
+        if (isNaN(overhead)) overhead = 0;
+        if (isNaN(margin)) margin = 0;
         
-        let geriOdemeAy = (yatirimBaslangic / (netYillikKar / 12)).toFixed(1);
+        let unitRawMat;
+        if (prodType === 'probiotic') unitRawMat = rawCostPerKg * 0.250;
+        else unitRawMat = rawCostPerKg * 0.100;
         
-        document.getElementById('yatirimOzet').innerHTML = `
-            <table>
-                <tr><th>Finansal Kalem</th><th>Tutar (₺)</th></tr>
-                <tr><td>Toplam yıllık üretim maliyeti (2 parti)</td><td>${(toplamUretimMaliyeti*2).toFixed(0)} ₺</td></tr>
-                <tr><td>Toplam yıllık ciro (tahmini)</td><td>${(toplamCiro*2).toFixed(0)} ₺</td></tr>
-                <tr><td>Brüt yıllık kar</td><td>${netYillikKar.toFixed(0)} ₺</td></tr>
-                <tr><td>Sabit giderler (yıl)</td><td>${yillikSabit.toFixed(0)} ₺</td></tr>
-                <tr><td>Net yıllık kâr (vergi öncesi)</td><td>${(netYillikKar - yillikSabit).toFixed(0)} ₺</td></tr>
-                <tr><td>Başlangıç yatırımı (ekipman + lisans)</td><td>${yatirimBaslangic.toFixed(0)} ₺</td></tr>
-                <tr><td>Geri ödeme süresi (ay)</td><td><b>${geriOdemeAy} ay</b></td></tr>
-            </table>
-            <strong>📈 Minimum yatırım bütçesi:</strong> ₺${yatirimBaslangic.toFixed(0)} (ürün geliştirme + üretim hattı + GMP altyapısı)
-        `;
+        let totalProdCost = unitRawMat + pack + overhead;
+        let sellingPrice = totalProdCost * (1 + margin / 100);
+        let profit = sellingPrice - totalProdCost;
+        
+        document.getElementById('unitRaw').innerText = unitRawMat.toFixed(2) + ' ₺';
+        document.getElementById('totalCost').innerText = totalProdCost.toFixed(2) + ' ₺';
+        document.getElementById('sellPrice').innerText = sellingPrice.toFixed(2) + ' ₺';
+        document.getElementById('profit').innerText = profit.toFixed(2) + ' ₺';
+        
+        let formulaDetail = productData[prodType].formula;
+        document.getElementById('formulaDetail').innerHTML = `📜 Formül baz oranları: ${formulaDetail}`;
     }
+    
+    calcBtn.addEventListener('click', calculate);
+    calculate(); // ilk yüklemede hesapla
 </script>
 </body>
 </html>
